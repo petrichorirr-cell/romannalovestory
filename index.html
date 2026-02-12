@@ -6,9 +6,7 @@
 <title>Будешь моей валентинкой?</title>
 
 <style>
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
     margin: 0;
@@ -31,8 +29,8 @@ body {
 }
 
 h1 {
-    font-size: 32px;
-    margin-bottom: 20px;
+    font-size: 30px;
+    margin-bottom: 25px;
     animation: fadeInDown 1.2s ease forwards;
 }
 
@@ -42,7 +40,7 @@ h1 {
 }
 
 button {
-    padding: 16px 32px;
+    padding: 16px 34px;
     font-size: 20px;
     border: none;
     border-radius: 50px;
@@ -55,12 +53,10 @@ button {
     background: white;
     color: #ff2e63;
     font-weight: bold;
-    box-shadow: 0 0 20px rgba(255,255,255,0.8);
+    box-shadow: 0 0 25px rgba(255,255,255,0.9);
 }
 
-#yesBtn:active {
-    transform: scale(0.95);
-}
+#yesBtn:active { transform: scale(0.95); }
 
 #noBtn {
     background: rgba(255,255,255,0.7);
@@ -68,9 +64,7 @@ button {
     position: absolute;
 }
 
-.hidden {
-    display: none;
-}
+.hidden { display: none; }
 
 #result {
     margin-top: 20px;
@@ -78,7 +72,115 @@ button {
 }
 
 #result img {
-    width: 260px;
+    width: 280px;
     max-width: 90%;
     border-radius: 20px;
-    margin-to
+    margin-top: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.heart {
+    position: fixed;
+    bottom: -20px;
+    font-size: 24px;
+    animation: float 6s linear forwards;
+    pointer-events: none;
+}
+
+@keyframes float {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-110vh) scale(1.6); opacity: 0; }
+}
+
+@keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+
+@keyframes fadeInDown {
+    from {opacity: 0; transform: translateY(-30px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Будешь моей валентинкой? 💖</h1>
+
+    <div class="buttons">
+        <button id="yesBtn">ДА</button>
+        <button id="noBtn">НЕТ</button>
+    </div>
+
+    <div id="result" class="hidden">
+        <h2>Ты сделала меня самым счастливым 💘</h2>
+        <img id="randomPhoto" src="" alt="Фото">
+        <p>Теперь официально — ты моя Валентинка ❤️</p>
+    </div>
+</div>
+
+<audio id="music" loop>
+    <source src="song1.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+const photos = [
+"photo_2860@06-12-2025_17-36-21_thumb.jpg",
+"photo_153@01-04-2025_11-34-38_thumb.jpg",
+"photo_174@02-04-2025_16-33-33.jpg",
+"photo_2580@20-11-2025_13-58-00_thumb.jpg"
+];
+
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const result = document.getElementById("result");
+const music = document.getElementById("music");
+const randomPhoto = document.getElementById("randomPhoto");
+
+document.body.addEventListener("click", () => {
+    music.play().catch(() => {});
+}, { once: true });
+
+function moveNoButton() {
+    const padding = 20;
+    const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+    const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+}
+
+noBtn.addEventListener("touchstart", moveNoButton);
+noBtn.addEventListener("mouseover", moveNoButton);
+
+yesBtn.addEventListener("click", () => {
+
+    const randomIndex = Math.floor(Math.random() * photos.length);
+    randomPhoto.src = photos[randomIndex];
+
+    result.classList.remove("hidden");
+    startHearts();
+});
+
+function startHearts() {
+    setInterval(() => {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = ["❤️","💖","💘","💕","💞"][Math.floor(Math.random()*5)];
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = (20 + Math.random() * 35) + "px";
+        heart.style.animationDuration = (4 + Math.random() * 3) + "s";
+        document.body.appendChild(heart);
+
+        setTimeout(() => heart.remove(), 7000);
+    }, 150);
+}
+
+</script>
+
+</body>
+</html>
+
